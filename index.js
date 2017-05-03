@@ -24,43 +24,43 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html')
 })
 
-app.post('/login/:id', (req, res) => {
-  console.log('LOGIN ROUTE REACHED')
-  // id is the client we want to connect to
-  if (!(req.params.id in clients)) {
-    return res.status(404).json({ message: 'Client with ID: ' + req.params.id + ' not found.'})
-  }
+// app.post('/login/:id', (req, res) => {
+//   console.log('LOGIN ROUTE REACHED')
+//   // id is the client we want to connect to
+//   if (!(req.params.id in clients)) {
+//     return res.status(404).json({ message: 'Client with ID: ' + req.params.id + ' not found.'})
+//   }
 
-  let id = req.params.id
+//   let id = req.params.id
 
-  // plaintext request to log in based on this
-  let dir = './Data_test'
-  let path = 'u000_w000'
-  let filename = 'u000_w000_accelerometer.log'
+//   // plaintext request to log in based on this
+//   let dir = './Data_test'
+//   let path = 'u000_w000'
+//   let filename = 'u000_w000_accelerometer.log'
 
-  console.log('Checking if RUNNING file exists')
+//   console.log('Checking if RUNNING file exists')
 
-  while(fs.existsSync('./Data_test/RUNNING')) {}
+//   while(fs.existsSync('./Data_test/RUNNING')) {}
 
-  console.log("No RUNNING file detected")
+//   console.log("No RUNNING file detected")
   
-  if (fs.existsSync('./Data_test/RESULT')) {
-    fs.unlinkSync('./Data_test/RESULT')
-  }
+//   if (fs.existsSync('./Data_test/RESULT')) {
+//     fs.unlinkSync('./Data_test/RESULT')
+//   }
 
-  writeToFile(dir, path, filename, req.body, function (err) {
-    if (err) {
-      return res.status(500).json({ message: 'Disaster! Internal Server Error' })
-    }
-    // Wait on the RESULT file
-    waitOnResult(function(result) {
-      console.log("RESULT FILE FOUND")
-      authenticate(result, io, id)
-      fs.unlinkSync('./Data_test/RESULT')
-      return res.status(200).json({ attempted: true })
-    })
-  })
-})
+//   writeToFile(dir, path, filename, req.body, function (err) {
+//     if (err) {
+//       return res.status(500).json({ message: 'Disaster! Internal Server Error' })
+//     }
+//     // Wait on the RESULT file
+//     waitOnResult(function(result) {
+//       console.log("RESULT FILE FOUND")
+//       authenticate(result, io, id)
+//       fs.unlinkSync('./Data_test/RESULT')
+//       return res.status(200).json({ attempted: true })
+//     })
+//   })
+// })
 
 app.post('/train/:id', (req, res) => {
   if (!(req.params.id in users)) {
